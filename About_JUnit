@@ -208,3 +208,28 @@ Assumptions provides "static" methods to support conditional test executions.
         repitionInfo.getTotalRepetitions();
      }
   }
+
+
+
+JUnit @Disabled annotation can be used to disable test method from the test suite. This can be applied over test class and
+individual test interface
+
+ - Optional parameters "only one" - indicates the reason why test has been disabled
+ - This only applied to 
+   . Test class or method annotated with @Test
+   
+ When applied at the class level, all test methods within that class are automatically disabled as well. 
+
+When applied at the method level, the presence of this annotation does not prevent the test class from being instantiated. 
+Rather, it prevents the execution of the test method and method-level lifecycle callbacks such as 
+  @BeforeEach methods, @AfterEach methods, and corresponding extension APIs.
+
+
+
+
+
+
+
+
+
+

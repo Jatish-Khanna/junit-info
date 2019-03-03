@@ -401,8 +401,27 @@ rd
 7. Assertions.assertTimeout and Assertions.assertTimeoutPreemptively
   These are user to verify long running tasks. If given task inside testcase takes more than specified duration
     - Test will fail
+    
+    Assertions.assertTimeout
+    Assertions.assertTimeoutPreemptively
   
-
+   The actual difference b/w these task (Excutable or ThrowingSupplier)
+   For "Timeout" -> Excutable or ThrowingSupplier will not be aborted
+   For "TimeoutPreeptively" -> Executable or ThrowingSupplier will be aborted 
+   
+   Example- 
+   Assertions.assertTimeout(Duration.ofMinutes(1)), () -> "Result" );
+   
+   Assertions.assertTimeout(Duration.ofMillis(100), () -> {
+    Thread.sleep(200);
+    return "Result";
+   });
+   
+   
+   Assertions.assertTimeoutPreemptively(Duration.ofMillis(100), () -> {
+    Thread.sleep(200);
+    return "Result";
+   });
 
 8. Assertions.assertTrue and Assertions.assertFalse
 9. Assertions.assertThrows

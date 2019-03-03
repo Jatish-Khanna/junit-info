@@ -471,3 +471,24 @@ rd
   public static void fail(Throwable cause)
   public static void fail(String message, Throwable cause)
   public static void fail(Supplier<String> messageSupplier)
+
+
+
+
+
+Assumptions are used when 
+  - we a test case doesn not make any sense to execute any further
+  
+  
+  Assertions.assumeTrue
+    validates the given assumption to true and if assumption is true, test proceeds or otherwise test execution is aborted
+    
+    public static void assumeTrue(boolean assumption) throws TestAbortedException
+    public static void assumeTrue(boolean assumption, String message) throws TestAbortedException
+    public static void assumeTrue(boolean assumption, Supplier<String> messageSupplier) throws TestAbortedException
+    
+    
+    v
+ 
+ Assertions.assumeFalse
+ 

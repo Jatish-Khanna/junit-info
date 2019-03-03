@@ -407,7 +407,7 @@ rd
   
    The actual difference b/w these task (Excutable or ThrowingSupplier)
    For "Timeout" -> Excutable or ThrowingSupplier will not be aborted
-   For "TimeoutPreeptively" -> Executable or ThrowingSupplier will be aborted 
+   For "TimeoutPreeptively" -> Executable or ThrowingSupplier will be aborted preemptively if timeout has been exceeded
    
    Example- 
    Assertions.assertTimeout(Duration.ofMinutes(1)), () -> "Result" );
@@ -417,12 +417,57 @@ rd
     return "Result";
    });
    
+   // Output -
+   // AssertionFailedError - Execution exceeded timeout of 100ms exceed by 101ms
    
    Assertions.assertTimeoutPreemptively(Duration.ofMillis(100), () -> {
     Thread.sleep(200);
     return "Result";
    });
+// Successful test
+
 
 8. Assertions.assertTrue and Assertions.assertFalse
+  Verifies if the Boolean condition is "true" or "True when supplied by BooleanSupplier" and false for assertFalse
+  
+  Assertions.assertTrue(boolean condition)
+  Assertions.assertTrue(boolean condition, String message)
+  Assertions.assertTrue(boolean condition, Supplier<String> supplierMessage)
+  
+  Assertions.assertTrue(BooleanSupplier booleanSupplier)
+  Assertions.assertTrue(BooleanSupplier booleanSupplier, String message)
+  Assertions.assertTrue(BooleanSupplier booleanSupplier, Supplier<String> supplierMessage)
+  
+  
+  Example:
+   Assertions.assertTrue(true)
+   Assertions.assertTrue(SampleSupplierMethod::getBooleanSupplied, () -> "This has been failed")
+   
+   class SampleSupplierMethod {
+     static boolean getBooleanSupplied() {
+      return false;
+     }
+   }
+  
+
 9. Assertions.assertThrows
-10. Assertions. assertFail
+ It asserts the execution of supplied "Executable" throws an exception of Expected type and return the exception
+ 
+ public static <T extends Throwable> T assertThrows(Class<T> expectedType, Executable executable)
+ 
+ Example:
+ 
+   void testMethod() {
+     Throwable throwable = Assertions.assertThrows(NumberFormatException.class, () -> {
+        return Integer.parseInt("One");
+     });
+   }
+   
+ 10. Assertions.assertFail
+
+  It fails the testcase
+  
+  public static void fail(String message)
+  public static void fail(Throwable cause)
+  public static void fail(String message, Throwable cause)
+  public static void fail(Supplier<String> messageSupplier)

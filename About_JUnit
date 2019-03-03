@@ -227,9 +227,110 @@ Rather, it prevents the execution of the test method and method-level lifecycle 
 
 
 
+JUnit @Tag annotations-
+
+  This annotations can be used to filter test cases from the test plans
+  . It can help creating multiple test plans for different environment
+  . Different use cases or any specific requirement
+  . Execute set of tests by including only those tests in test plan or by excluding test from those plans
+  
+  
+  Example - 
+  
+  @RunWith(JUnitPlatform.class)
+  @SelectedPackages("com.test.success")
+  @IncludeTags("development")
+  
+  class SampleApplicationDevelopmentTest {
+  
+  }
+  
+  @RunWith(JUnitPlatform.class)
+  @SelectedPackages("com.test.success")
+  @IncludeTags("production")
+  class SampleProductionTest {
+  
+  }
+  
+  
+  class MySampleTest {
+    
+     @Tag("development")
+     @Test
+     public void myDevTest() {
+     
+     }
+     
+     @Tag("production")
+     @Test
+     public void myProdTest() {
+     
+     }
+     
+     @Tag("development")
+     @Tag("production")
+     @Test
+     public void myDevProdTest() {
+     
+     }
+  }
+  
+  
+  
+  Assertions.assertThrows()
+    To find and verify the test case result should be an exception
+    
+    public static <T extends Throwable> T assertThrows(Class<T> expectedType, Executable executable)
+    
+    if no exception is thrown or exception thrown is different from expected, the test will fail
+    ** Exception of "Super Type" are allowed, this will succeed our test case
+    
+    
+    @Test
+    void testExpectedException {
+      Assertions.assertThrows(NumberFormatException.class, () -> {Integer.parseInt("one");});
+      
+      // Super type exceptions expected 
+      Assertions.assertThrows(Exception.class, () -> {Integer.parseInt("one");});
+    }
+    
 
 
 
 
+Assertions class Examples-
 
+1. Assertions.assertEquals and Assertions.assertNotEquals
+  To verify the expected value and original value are equal or unEqual
+  - The assertions have overloaded method for different types int, float, long, String ...
+  - Overloaded method to supply the messages
+ 
+  public static void assertEquals(int expected, int actual)
+  public static void assertEquals(int expected, int actual, String message)
+  public static void assertEquals(int expected, int actual, Supplier<String> messageSupplier)
+  
+  Example
+    Assertions.assertEquals(1, 1);
+    Assertions.assertEquals(1,1, )
+    
+  Note: Assertions.assertNotEquals doesn't have multiple overloaded messages like Assertions.assertEquals
+  It has only below mentioned methods that accepts Object parameters
+    
+  Assertions.assertNotEquals(Object expected, Object actual)
+  Assertions.assertNotEquals(Object expected, Object actual, String message)
+  Assertions.assertNotEquals(Object expected, Object actual, Supplier<String> messageSupplier)
 
+2. Assertions.assertArrayEquals
+  - Similar to #1 Assertions.assertEquals we have multiple overloaded method to verify if expected and actual arrays are equal
+  - With each having three overloaded functions
+  
+  Example
+
+3. Assertions.assertIterableEquals
+4. Assertions.assertLinesMatch
+5. Assertions.assertNull and Assertions.assertNotNull
+6. Assertions.assertSame and Assertions.assertNotSame
+7. Assertions.assertTimeout and Assertions.assertTimeoutPreemptively
+8. Assertions.assertTrue and Assertions.assertFalse
+9. Assertions.assertThrows
+10. Assertions. assertFail

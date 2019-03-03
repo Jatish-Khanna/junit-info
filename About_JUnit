@@ -13,14 +13,17 @@ Most used annotations:
 @BeforeAll -  "Once" before all the test method. Must ensure the method must be "static"
 @AfterAll - "once" after all the test method. Must ensure the method must be "static".
 
-Note: Above mentioned annotations are non-repeatable.
+@DisplayName - to display custom name for the test case
+@Disabled - to "ignore" the test case or test class
+@Nested - to create "nested" subclass
+@RepeatedTest - this provide the count the test case should be repeated
+
+Note: all Above mentioned annotations are non-repeatable.
 What does repeatable means -
   - Any annotation which can be placed 2+ times over the same method or test class and definition marked with @Repeatable.
 Note: Need to check for below mentioned annotations if any of them are repeatable
 
-@DisplayName - to display custom name for the test case
-@Disabled - to "ignore" the test case or test class
-@Nested - to create "nested" subclass
+
 @Tag - "marks" the test class and method with tags to perform filtering and discovering
 @TestFactory - mark method is "test factory" for dynamic test
 
@@ -75,3 +78,133 @@ Note: None of the method should be annotated as private, else it will be ignored
  }
  
  
+
+
+JUnit Assumptions - (like the assertions)
+Assumptions provides "static" methods to support conditional test executions.
+  . A failed assumption in a test being "Aborted"
+  . Assumptions are used whenever it does not make sense to continue execution of given test method
+  . Methods provided by assumptions
+    * assumeThat
+    * assumeTrue
+    * assumeFalse
+    
+ class SampleTestCase {
+ 
+  @Test
+  void firstTest() {
+    System.setProperty("ENV", "DEV");
+    Assumptions.assumeTrue("DEV".equals(System.getProperty("ENV")));
+    
+    System.setProperty("ENV", "PROD");
+    Assumptions.assumeFalse("DEV".equals(System.getProperty("ENV")));
+    
+  }
+ }
+    
+    
+    
+  Junit Test suites-
+    To run test spread across multiple test cases and different packages
+    . Annotations from JUnit to create test suites
+      * @SelectPackages
+      * @SelectClasses
+      
+      // To filter over class packages
+      * @IncludePackages
+      * @ExcludePackages
+      
+      // To filter over classname patterns
+      * @IncludeClassNamePatterns
+      * @ExcludeClassNamePatterns
+      
+      // To filter over class tags
+      * @IncludeTags
+      * @ExcludeTags
+    
+  Example-
+  
+    @RunWith(JUnitPlatform.class)
+    @SelectPackages("com.test.success")
+    class TestSuiteRunner {
+      
+    }
+    
+    
+    
+ JUnit Assertions -
+ 
+   These help in validating the expected output of JUnit test cases
+    . Static methods are available in org.junit.jupiter.Assertions
+    
+     - assertEquals
+     - assertNotEquals
+     
+  Example - 
+  
+  import static org.junit.jupiter.Assertions.*;
+  
+  class SampleTestExample {
+  
+    @Test
+    public void testDone() {
+      assertEquals(1, 1);
+      
+      assertNotEquals(1, 2);
+    }
+  }
+  
+  
+  
+  
+  @RepeatedTest annotations -
+  
+    Features of @RepeatedTest annotations
+     . It can give a custom display name with dynamic placeholders
+       {displayName} -> Display name for repeated annotation
+       {currentRepetition} -> the current repetition count
+       {totalRepetitions} -> total number of repetition count
+  
+  Predefined layout for repetition name:
+    RepeatedTest.SHORT_DISPLAY_NAME ->(default) repetition {currentRepetition} of {totalRepetitions}
+    RepeatedTest.LONG_DISPLAY_NAME -> {displayName} :: repetition {currentRepetition} of {totalRepetitions}
+  
+  class MyTestClass {
+  
+    static int testCounter = 1;
+  
+    @BeforeAll
+    public static void init() {
+    
+      System.out.println("Init - with @BeforeAll annotation");
+    }
+    
+    // The output of method will be -
+    //	Test counter in test method: 1
+//	Test counter in test method: 2
+//	Test counter in test method: 3
+//	Test counter in test method: 4
+//	Test counter in test method: 5
+//	Test counter in test method: 6
+
+// The test has been repeated +! times the value specified in the annotation
+
+    @Test
+    @RepeatedTest(5)
+    public void testMethod() {
+      System.out.println("Test counter in test method: "+ testCounter);
+      testCounter++;
+    }
+  }
+  
+  
+  RepetitionInfo - interface injected to get details of repition at runtime
+  
+  class SampleApplicationTest {
+  
+     @BeforeEach
+     public void test(RepetitionInfo repetitionInfo) {
+        repitionInfo.getCurrentRepetition();
+        repitionInfo.getTotalRepetitions();
+     }
+  }

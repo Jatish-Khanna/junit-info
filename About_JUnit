@@ -1,0 +1,77 @@
+
+
+JUnit Jupiter - new programming model and an extension model to writing test cases
+JUnit vintage - for backward compatibility b/w JUnit 3 and 4
+
+
+Most used annotations:
+
+@Test - donates that method is a test method
+@ParameterizedTest - 
+@BeforeEach - This ensure to execute "before" each test method
+@AfterEach - this ensure to execute "after" each test method
+@BeforeAll -  "Once" before all the test method. Must ensure the method must be "static"
+@AfterAll - "once" after all the test method. Must ensure the method must be "static".
+
+Note: Above mentioned annotations are non-repeatable.
+What does repeatable means -
+  - Any annotation which can be placed 2+ times over the same method or test class and definition marked with @Repeatable.
+Note: Need to check for below mentioned annotations if any of them are repeatable
+
+@DisplayName - to display custom name for the test case
+@Disabled - to "ignore" the test case or test class
+@Nested - to create "nested" subclass
+@Tag - "marks" the test class and method with tags to perform filtering and discovering
+@TestFactory - mark method is "test factory" for dynamic test
+
+
+
+Life Cycle of testing - 
+it is driven by annotations -
+Note: None of the method should be annotated as private, else it will be ignored by JUnit
+
+ @BeforeAll --------->[start:]  @BeforeEach -----------> @Test --------------> @AfterEach [goto start]--------------> @AfterAll
+ 
+ @BeforeAll and @AfterAll if there are "multiple methods annotated" with the mentioned annotations
+   - The order of execution is undeterminded for respective annotations
+  
+  
+  
+ Example - a sample use of all the annotations
+ 
+ class SampleTestCase {
+  
+  // keyword static is important for the transaction
+  // If method annotated is not static a JUnitException will be thrown at "runtime"
+  @BeforeAll
+  public static void init() {
+  
+  }
+  
+  // Must not be "static" else JUnitException will be thrown at runtime
+  
+  @BeforeEach
+  public void setupEachTest() {
+  
+  }
+  
+  // Should not be "private" or "static" else Testmethod will be ignore
+  @Test
+  public void firstTest() {
+  
+  }
+  
+  // Same rules for @BeforeEach
+  @AfterEach
+  public void afterEachTest() {
+  
+  }
+  
+  // Same rules as "@BeforeAll"
+  @AfterAll
+  public static void closeAfterAll() {
+  
+  }
+ }
+ 
+ 

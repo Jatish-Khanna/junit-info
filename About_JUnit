@@ -311,7 +311,8 @@ Assertions class Examples-
   
   Example
     Assertions.assertEquals(1, 1);
-    Assertions.assertEquals(1,1, )
+    Assertions.assertEquals(1,2, "This test has been failed");
+    Assertions.assertEquals(1, 3, () -> "this test has been failed")
     
   Note: Assertions.assertNotEquals doesn't have multiple overloaded messages like Assertions.assertEquals
   It has only below mentioned methods that accepts Object parameters
@@ -320,17 +321,89 @@ Assertions class Examples-
   Assertions.assertNotEquals(Object expected, Object actual, String message)
   Assertions.assertNotEquals(Object expected, Object actual, Supplier<String> messageSupplier)
 
+  Example- 
+    Assertions.assertNotEquals("1", "2");
+    Assertions.assertNotEquals("1", "2", "This test has been failed")
+    // Supplier<String> lamda expression has been used
+    Assertions.assertNotEquals("1", "2", () -> "This test has been failed")
+
 2. Assertions.assertArrayEquals
   - Similar to #1 Assertions.assertEquals we have multiple overloaded method to verify if expected and actual arrays are equal
   - With each having three overloaded functions
   
-  Example
+  Example-
+  
+  Assertions.assertArrayEquals(new int[]{1,2,3}, new int[]{1, 2, 3})
+  Assertions.assertArrayEquals(new int[]{1,2,3}, new int[]{1,2,4},"This test has been failed")
+  Assertions.assertArrayEquals(new int[]{1,2,3}, new int[]{1,2,4}, () -> "This test has been failed")
 
 3. Assertions.assertIterableEquals
+  It verifies that actual and expected Iterables are equal. The check done has been "Deeply"
+  . It means that all the Objects and count of objects within the array are equal
+  
+  Assertions.assertIterableEquals(Iterable<?> actual, Iterable<?> expected)
+  Assertions.assertIterableEquals(Iterable<?> actual, Iterable<?> expected, String message)
+  Assertions.assertIterableEquals(Iterable<?> actual, Iterable<?> expected, Supplier<String> supplierMessage)
+  
+  Example- 
+  
+    Assertions.assertIterableEquals(Arrays.asList(1,2,3), Arrays.asList(1,2,3))
+  
+
 4. Assertions.assertLinesMatch
+  To verify if the expected list of String matches actual list. The logic to match a String with another string
+   . Check if expected.equals(actual) - if yes, continue with next pair
+   . Otherwise treat expected as regural expression
+     expected.matches(actual)
+     
+   . Otherwise check if expected line is a fastforward marker, if yes apply fastforward actual lines accordingly
+rd
+
 5. Assertions.assertNull and Assertions.assertNotNull
+  assertNull checks if the actual is null
+  assertNotNull check if the actual is not null
+  
+  
+  Assertions.assertNull(Object actual)
+  Assertions.assertNull(Object actual, String message)
+  Assertions. assertNull(Object actual, Supplier<String> supplierMessage)
+  
+  Assertions.assertNotNull(Object actual)
+  Assertions.assertNotNull(Object actual, String message)
+  Assertions.assertNotNull(Object actual, Supplier<String> supplierMessage)
+
+  String nullString = null;
+  String nonNullString = "I am happy!!"
+  
+  Assertions.assertNull(nullString)
+  Assertions.assertNotNull(nonNullString)
+
 6. Assertions.assertSame and Assertions.assertNotSame
+  To verify if the actual and expected reference to the same object
+  
+  Assertions.assertSame(Object expected, Object actual)
+  Assertions.assertSame(Object expected, Object actual, String message)
+  Assertions.assertSame(Object expected, Object actual, Supplier<String> supplierMessage)
+  am 
+  Assertions.assertNotSame(Object expected, Object actual)
+  Assertions.assertNotSame(Object expected, Object actual, String message)
+  Assertions.assertNotSame(Object expected, Object actual, Supplier<String> supplierMessage)
+  
+  Example-
+  String firstRef = "I am excited! how can I be a builder for Fifth generation!"
+  Sting secondRef = firstRef;
+  
+  Assertions.assertSame(firstRef, secondRef)
+  Assertions.assertSame(firstRef, secondRef, "check reference are not same")
+  Assertions.assertSame(firstRef, secondRef, () -> "check reference are not same")
+
+
 7. Assertions.assertTimeout and Assertions.assertTimeoutPreemptively
+  These are user to verify long running tasks. If given task inside testcase takes more than specified duration
+    - Test will fail
+  
+
+
 8. Assertions.assertTrue and Assertions.assertFalse
 9. Assertions.assertThrows
 10. Assertions. assertFail
